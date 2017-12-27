@@ -6,6 +6,7 @@ class Shuffle {
 	parent = null;
 	
 	slots = null;
+	
 	selected = null;
 	
 	constructor(q=5, t="text", pm="[Title]", r=true, pt=::fe) {
@@ -16,8 +17,6 @@ class Shuffle {
 		parent = pt;
 		
 		slots = [];
-		selected = 0;
-		
 		for (local i=0; i<quantity; i++) {
 			switch (type) {
 				case "artwork":
@@ -34,6 +33,8 @@ class Shuffle {
 					break;
 			}
 		}
+		
+		selected = 0;
 		
 		update();
 		
