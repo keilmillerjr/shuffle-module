@@ -6,16 +6,16 @@ class Shuffle {
 	parent = null;
 	
 	slots = null;
-	
+
 	selected = null;
-	
+
 	constructor(q=5, t="text", pm="[Title]", r=true, pt=::fe) {
 		quantity = q;
 		type = t;
 		param = pm;
 		reset = r;
 		parent = pt;
-		
+
 		slots = [];
 		for (local i=0; i<quantity; i++) {
 			switch (type) {
@@ -33,14 +33,14 @@ class Shuffle {
 					break;
 			}
 		}
-		
+
 		selected = 0;
-		
+
 		update();
-		
+
 		fe.add_signal_handler(this, "handler");
 	}
-	
+
 	function handler(signal_str) {
 		switch (signal_str) {
 			case "prev_page":
@@ -60,26 +60,26 @@ class Shuffle {
 				break;
 			case "prev_display":
 			case "next_display":
-			case "next_filter": 
+			case "next_filter":
 			case "prev_filter":
 				if (reset == true) selected = 0;
 				update();
 				break;
 		}
 	}
-	
-	function next() {		
+
+	function next() {
 		if (selected < (quantity - 1)) selected++;
 	}
-	
+
 	function prev() {
 		if (selected > 0) selected--;
 	}
-	
+
 	function update() {
 		for (local i=0; i<quantity; i++) {
 			slots[i].index_offset = -(selected - i);
-			
+
 			if (-(selected - i) == 0) {
 				select(slots[i]);
 			}
@@ -88,12 +88,12 @@ class Shuffle {
 			}
 		}
 	}
-	
+
 	function select(slot) {
-	
+
 	}
-	
+
 	function deselect(slot) {
-	
+
 	}
 }
