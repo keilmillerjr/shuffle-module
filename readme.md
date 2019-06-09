@@ -23,7 +23,7 @@ Shuffle currently has no dependancies.
 
 ## Usage
 
-From within your layout, you will load the Shuffle module. Shuffle keeps presentation and logic separate. It is up to you to create your objects and apply properties to them. You will then create an instance of the class, passing the following parameters: array containing your objects, the objects type, optional boolean if you want reset the selected slot when changing list.
+From within your layout, you will load the Shuffle module. Shuffle keeps presentation and logic separate. It is up to you to create your objects and apply properties to them. You will then create an instance of the class.
 
 ```squirrel
 // Load the Shuffle module
@@ -36,11 +36,44 @@ local list = [];
 	list.push(fe.add_text("Title", -1, -1, 1, 1));
 
 // Create an instance of the Shuffle class
-// Shuffle(slots, type, reset=true)
-local list = Shuffle(list, "text");
+// Shuffle({arg=val})
+// Options:
+// 	reset=bool - defaulting argument
+// 	save=string - optional argument
+// 	slots=[] - required argument
+
+local list = Shuffle({ reset=false, save="mytheme", slots=list });
 ```
 
-You may also extend the class and use the *select* and *deselect* functions. These functions are run after every transition, and can change your presentation.
+###### Supported objects
+
+* artwork
+* image
+* text
+* preserveImage
+* preserveArt
+
+#### Extending the class
+
+###### public variables
+
+* VERSION
+
+###### public methods
+
+* getSelected()
+* getSlots()
+* getVersion()
+* setSelected()
+
+###### private methods
+
+* _refresh()
+* _refreshDeselected()
+* _refreshSelected
+* _signals(signal\_str)
+* _transitions(ttype, var, ttime)
+* _updateIndexes()
 
 This example will extend the Shuffle class and make a selected slot bold and deselected slots regular.
 
@@ -55,34 +88,26 @@ local list = [];
 	list.push(fe.add_text("Title", -1, -1, 1, 1));
 
 class ShuffleList extends Shuffle {
-	// If necessary, you can extend the update function
-	// Perform actions with the slots array
-	function update() {
-		base.update();
+	// If necessary, you can extend the refresh function
+	// Useful to applying effects while looping through the slots array
+	function refresh() {
+		base._refresh();
 	}
 
-	// Overwrite the select function
-	function select(slot) {
+	// Overwrite the _refreshSelected function
+	function _refreshSelected(slot) {
 		slot.style = Style.Bold;
 	}
 
-	// Overwrite the deselect function
-	function deselect(slot) {
+	// Overwrite the _refreshDeselected function
+	function _refreshDeselected(slot) {
 		slot.style = Style.Regular;
 	}
 }
 
 // Create an instance of the ShuffleList class
-local list = ShuffleList(list, "text");
+local list = ShuffleList({ slots=list });
 ```
-
-Shuffle accepts the following types of objects:
-
-* artwork
-* image
-* text
-* preserveImage
-* preserveArt
 
 ## Notes
 
