@@ -1,4 +1,4 @@
-const SHUFFLE_VERSION = "2.0.0";
+const SHUFFLE_VERSION = "2.0.1";
 ::SHUFFLE_VERSION <- SHUFFLE_VERSION;
 
 class Shuffle {
@@ -76,6 +76,7 @@ class Shuffle {
 			case "random_game":
 			case "prev_letter":
 			case "next_letter":
+			case "add_favourite":
 			case "prev_favourite":
 			case "next_favorite":
 				this._ignoreNewSelection = true;
@@ -103,17 +104,21 @@ class Shuffle {
 				}
 				break;
 			case Transition.ToNewList:
-				if (this._reset == true) this._selected = 0;
-				_updateIndexes();
-				_refresh();
+				if (this._ignoreNewSelection == true) { this._ignoreNewSelection = false; }
+				else {
+					if (this._reset == true) this._selected = 0;
+					else __updateSelected(var);
+					_updateIndexes();
+					_refresh();
+				}
 				break;
 			case Transition.ToNewSelection:
-				if (this._ignoreNewSelection != true) {
+				if (this._ignoreNewSelection == true) { this._ignoreNewSelection = false; }
+				else {
 					__updateSelected(var);
 					_updateIndexes();
 					_refresh();
 				}
-				else { this._ignoreNewSelection = false; }
 				break;
 		}
 	}
@@ -128,16 +133,8 @@ class Shuffle {
 	# protected
 
 	function __updateSelected(position) {
-		switch (position>0) {
-			# select next slot
-			case true:
-				if (this._selected<(this._slots.len()-1)) this._selected++;
-				break;
-			# select previous slot
-			case false:
-				if (this._selected>0) this._selected--;
-				break;
-		}
+		if (position>0 && this._selected<(this._slots.len()-1)) this._selected++;
+		if (position<0 && this._selected>0) this._selected--;
 	}
 
 	function __validatesSelected(selected) {
