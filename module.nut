@@ -104,21 +104,18 @@ class Shuffle {
 				}
 				break;
 			case Transition.ToNewList:
-				if (this._ignoreNewSelection == true) { this._ignoreNewSelection = false; }
-				else {
-					if (this._reset == true) this._selected = 0;
-					else __updateSelected(var);
-					_updateIndexes();
-					_refresh();
-				}
+				if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+				else if (this._reset == true) this._selected = 0;
+
+				_updateIndexes();
+				_refresh();
 				break;
 			case Transition.ToNewSelection:
-				if (this._ignoreNewSelection == true) { this._ignoreNewSelection = false; }
-				else {
-					__updateSelected(var);
-					_updateIndexes();
-					_refresh();
-				}
+				if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+				else __updateSelected(var);
+
+				_updateIndexes();
+				_refresh();
 				break;
 		}
 	}
