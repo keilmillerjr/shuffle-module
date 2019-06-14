@@ -86,37 +86,38 @@ class Shuffle {
 	}
 
 	function _transitions(ttype, var, ttime) {
-		switch(ttype) {
-			case Transition.StartLayout:
-				if (this._save) {
-					try {
-						assert(__validatesSelected(fe.nv.shuffle[this._save]));
-						this._selected = fe.nv.shuffle[this._save];
-					}
-					catch(e) { print("ERROR in an instance of Shuffle: save - improper save data\n"); }
-				}
-				break;
-			case Transition.EndLayout:
-				if (this._save) {
-					if (!("shuffle" in fe.nv)) fe.nv.shuffle <- {};
-					if ("save" in fe.nv.shuffle) fe.nv.shuffle[this._save] = this._selected;
-					else fe.nv.shuffle[this._save] <- this._selected;
-				}
-				break;
-			case Transition.ToNewList:
-				if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
-				else if (this._reset == true) this._selected = 0;
+		// load save from fe.nv
+		if (ttype == Transition.StartLayout && this._save) {
+			try {
+				assert(__validatesSelected(fe.nv.shuffle[this._save]));
+				this._selected = fe.nv.shuffle[this._save];
+			}
+			catch(e) { print("ERROR in an instance of Shuffle: save - improper save data\n"); }
+		}
 
-				_updateIndexes();
-				_refresh();
-				break;
-			case Transition.ToNewSelection:
-				if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
-				else __updateSelected(var);
+		// store save in fe.nv
+		else if (ttype == Transition.EndLayout && this._save) {
+			if (!("shuffle" in fe.nv)) fe.nv.shuffle <- {};
+			if ("save" in fe.nv.shuffle) fe.nv.shuffle[this._save] = this._selected;
+			else fe.nv.shuffle[this._save] <- this._selected;
+		}
 
-				_updateIndexes();
-				_refresh();
-				break;
+		// ToNewList
+		else if (ttype == Transition.ToNewList) {
+			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+			else if (this._reset == true) this._selected = 0;
+		}
+
+		// ToNewSelection
+		else if (ttype == Transition.ToNewSelection) {
+			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+			else __updateSelected(var);
+		}
+
+		// process
+		if (ttype == Transition.ToNewList || ttype == Transition.ToNewSelection) {
+			_updateIndexes();
+			_refresh();
 		}
 	}
 
