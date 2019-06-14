@@ -1,4 +1,4 @@
-const SHUFFLE_VERSION = "2.0.1";
+const SHUFFLE_VERSION = "2.1.0";
 ::SHUFFLE_VERSION <- SHUFFLE_VERSION;
 
 class Shuffle {
