@@ -112,13 +112,13 @@ class Shuffle {
 		}
 
 		// ToNewSelection
-		else if (ttype == Transition.ToNewSelection) {
+		else if (ttype == Transition.FromOldSelection) {
 			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
 			else __updateSelected(var);
 		}
 
 		// process
-		if (ttype == Transition.ToNewList || ttype == Transition.ToNewSelection) {
+		if (ttype == Transition.ToNewList || ttype == Transition.FromOldSelection) {
 			_updateIndexes();
 			_refresh();
 		}
@@ -134,8 +134,8 @@ class Shuffle {
 	# protected
 
 	function __updateSelected(position) {
-		if (position>0 && this._selected<(this._slots.len()-1)) this._selected++;
-		if (position<0 && this._selected>0) this._selected--;
+		if (position<0 && this._selected<(this._slots.len()-1)) this._selected++;
+		if (position>0 && this._selected>0) this._selected--;
 	}
 
 	function __validatesSelected(selected) {
