@@ -64,13 +64,14 @@ local list = Shuffle({ reset=false, save="mytheme", slots=list });
 * getSelected()
 * getSlots()
 * getVersion()
-* setSelected()
+* setSelected(slot)
 
 ###### private methods
 
 * _refresh()
-* _refreshDeselected()
-* _refreshSelected
+* _refreshAll(slot)
+* _refreshDeselected(slot)
+* _refreshSelected(slot)
 * _signals(signal\_str)
 * _transitions(ttype, var, ttime)
 * _updateIndexes()
@@ -88,11 +89,9 @@ local list = [];
 	list.push(fe.add_text("Title", -1, -1, 1, 1));
 
 class ShuffleList extends Shuffle {
-	// If necessary, you can extend the refresh function
-	// Useful to applying effects while looping through the slots array
-	function refresh() {
-		base._refresh();
-	}
+	// Overwrite the _refreshAll function
+	// Useful for conditional logic like game info
+	function _refreshAll(slot) {}
 
 	// Overwrite the _refreshSelected function
 	function _refreshSelected(slot) {

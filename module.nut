@@ -63,9 +63,12 @@ class Shuffle {
 
 	function _refresh() {
 		for (local i=0; i<this._slots.len(); i++) {
+			_refreshAll(this._slots[i]);
 			-(this._selected-i)==0 ? _refreshSelected(this._slots[i]) : _refreshDeselected(this._slots[i]);
 		}
 	}
+
+	function _refreshAll(slot) {}
 
 	function _refreshDeselected(slot) {}
 
