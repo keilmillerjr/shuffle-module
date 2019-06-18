@@ -1,9 +1,14 @@
-const SHUFFLE_VERSION = "2.1.0";
+// shuffle-module
+// by Keil Miller Jr
+// https://github.com/keilmillerjr/shuffle-module
+
+const SHUFFLE_VERSION = "2.2.0";
 ::SHUFFLE_VERSION <- SHUFFLE_VERSION;
 
 class Shuffle {
 	__fatalError = null;
 	_ignoreNewSelection = null;
+	_loop = null;
 	_reset = null;
 	_save = null;
 	_selected = null;
@@ -15,10 +20,23 @@ class Shuffle {
 		this._selected = 0;
 
 		// reset validation - defaulting argument
-		try { assert(__validateReset(opts.reset)); }
+		try {
+			assert(__validateBool(opts.reset));
+			this._reset = opts.reset;
+		}
 		catch(e) {
 			if ("reset" in opts) print("ERROR in an instance of Shuffle: constructor - improper reset argument, switching to default value\n");
 			this._reset = true;
+		}
+
+		// loop validation - defaulting argument
+		try {
+			assert(__validateBool(opts.loop));
+			this._loop = opts.loop;
+		}
+		catch(e) {
+			if ("loop" in opts) print("ERROR in an instance of Shuffle: constructor - improper reset argument, switching to default value\n");
+			this._loop = true;
 		}
 
 		// save validation - optional argument
@@ -32,6 +50,7 @@ class Shuffle {
 				this._save = null;
 			}
 		}
+
 		// slots validation - required argument
 		try {
 			assert(__validateSlots(opts.slots))
@@ -76,6 +95,14 @@ class Shuffle {
 
 	function _signals(signal_str) {
 		switch(signal_str) {
+			// ignore signals at start or end of list when looping is false
+			case "prev_game":
+				if (this._loop == false && fe.list.index == 0) return true;
+				break;
+			case "next_game":
+				if (this._loop == false && fe.list.index == fe.list.size-1) return true;
+				break;
+			// ignore new selection for these signals
 			case "random_game":
 			case "prev_letter":
 			case "next_letter":
@@ -138,17 +165,8 @@ class Shuffle {
 		if (position>0 && this._selected>0) this._selected--;
 	}
 
-	function __validatesSelected(selected) {
-		try {
-			assert(typeof(selected) == "integer");
-			assert(selected>=0 && selected<this._slots.len());
-		}
-		catch(e) { return false; }
-		return true;
-	}
-
-	function __validateReset(reset) {
-		try { assert(typeof(reset) == "bool"); }
+	function __validateBool(var) {
+		try { assert(typeof(var) == "bool"); }
 		catch(e) { return false; }
 		return true;
 	}
@@ -157,6 +175,15 @@ class Shuffle {
 		try {
 			assert(typeof(save) == "string");
 			assert(save.len()>0);
+		}
+		catch(e) { return false; }
+		return true;
+	}
+
+	function __validatesSelected(selected) {
+		try {
+			assert(typeof(selected) == "integer");
+			assert(selected>=0 && selected<this._slots.len());
 		}
 		catch(e) { return false; }
 		return true;

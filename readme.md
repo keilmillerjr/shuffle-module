@@ -38,9 +38,10 @@ local list = [];
 // Create an instance of the Shuffle class
 // Shuffle({arg=val})
 // Options:
-// 	reset=bool - defaulting argument
+//  loop=bool - defaulting argument
 // 	save=string - optional argument
-// 	slots=[] - required argument
+// 	slots=array - required argument
+// 	reset=bool - defaulting argument
 
 local list = Shuffle({ reset=false, save="mytheme", slots=list });
 ```
@@ -57,24 +58,24 @@ local list = Shuffle({ reset=false, save="mytheme", slots=list });
 
 ###### public variables
 
-* VERSION
+* ```VERSION```
 
 ###### public methods
 
-* getSelected()
-* getSlots()
-* getVersion()
-* setSelected(slot)
+* ```getSelected()```
+* ```getSlots()```
+* ```getVersion()```
+* ```setSelected(slot)```
 
 ###### private methods
 
-* _refresh()
-* _refreshAll(slot)
-* _refreshDeselected(slot)
-* _refreshSelected(slot)
-* _signals(signal\_str)
-* _transitions(ttype, var, ttime)
-* _updateIndexes()
+* ```_refresh()```
+* ```_refreshAll(slot)```
+* ```_refreshDeselected(slot)```
+* ```_refreshSelected(slot)```
+* ```_signals(signal_str)```
+* ```_transitions(ttype, var, ttime)```
+* ```_updateIndexes()```
 
 This example will extend the Shuffle class and make a selected slot bold and deselected slots regular.
 
@@ -105,9 +106,11 @@ class ShuffleList extends Shuffle {
 }
 
 // Create an instance of the ShuffleList class
-local list = ShuffleList({ slots=list });
+local list = ShuffleList({slots=list});
 ```
 
 ## Notes
+
+I made this plugin available open source to help others create layouts. Either instruct users to download from this repo, or distribute all files in this repo including the license and readme.
 
 More functionality is expected as it meets my needs. If you have an idea of something to add that might benefit a wide range of layout developers, please join the [AttractMode forum](http://forum.attractmode.org) and send [me](http://forum.attractmode.org/index.php?action=profile;u=32) a message.
