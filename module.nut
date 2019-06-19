@@ -102,7 +102,7 @@ class Shuffle {
 			case "next_game":
 				if (this._loop == false && fe.list.index == fe.list.size-1) return true;
 				break;
-			// ignore new selection for these signals
+			// do not update selection for these signals
 			case "random_game":
 			case "prev_letter":
 			case "next_letter":
@@ -112,6 +112,7 @@ class Shuffle {
 				this._ignoreNewSelection = true;
 				break;
 		}
+
 		return false;
 	}
 
@@ -132,15 +133,22 @@ class Shuffle {
 			else fe.nv.shuffle[this._save] <- this._selected;
 		}
 
-		// ToNewList
+		// to new list
 		else if (ttype == Transition.ToNewList) {
+			// do not update new selection
 			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
-			else if (this._reset == true) this._selected = 0;
+			// reset
+			else if (this._reset == true) {
+				this._selected = 0;
+				fe.list.index = 0;
+			}
 		}
 
-		// ToNewSelection
+		// to new selection
 		else if (ttype == Transition.FromOldSelection) {
+			// do not update new selection
 			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+			// update selected
 			else __updateSelected(var);
 		}
 
@@ -149,6 +157,8 @@ class Shuffle {
 			_updateIndexes();
 			_refresh();
 		}
+
+		return false;
 	}
 
 	function _updateIndexes() {
