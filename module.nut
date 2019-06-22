@@ -117,6 +117,9 @@ class Shuffle {
 	}
 
 	function _transitions(ttype, var, ttime) {
+		// Transition.ToNewSelection updates only indexes
+		// Transition.FromOldSelection updates all new data
+
 		// load save from fe.nv
 		if (ttype == Transition.StartLayout && this._save) {
 			try {
@@ -144,7 +147,7 @@ class Shuffle {
 			}
 		}
 
-		// to new selection
+		// from old selection
 		else if (ttype == Transition.FromOldSelection) {
 			// do not update new selection
 			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
