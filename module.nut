@@ -154,14 +154,14 @@ class Shuffle {
 
 		// process
 		if (ttype == Transition.ToNewList || ttype == Transition.FromOldSelection) {
-			_updateIndexes();
+			_updateIndexOffsets();
 			_refresh();
 		}
 
 		return false;
 	}
 
-	function _updateIndexes() {
+	function _updateIndexOffsets() {
 		for (local i=0; i<this._slots.len(); i++) {
 			try { this._slots[i].index_offset = -(this._selected-i) } catch(e) {}
 			try { this._slots[i].art.index_offset = -(this._selected-i); } catch(e) {}

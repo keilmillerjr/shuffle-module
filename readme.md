@@ -75,7 +75,7 @@ local list = Shuffle({ reset=false, save="mytheme", slots=list });
 * ```_refreshSelected(slot)```
 * ```_signals(signal_str)```
 * ```_transitions(ttype, var, ttime)```
-* ```_updateIndexes()```
+* ```_updateIndexOffsets()```
 
 This example will extend the Shuffle class and make a selected slot bold and deselected slots regular.
 
