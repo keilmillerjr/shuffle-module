@@ -8,6 +8,7 @@ const SHUFFLE_VERSION = "2.2.0";
 class Shuffle {
 	__fatalError = null;
 	_ignoreNewSelection = null;
+	_hide = null;
 	_loop = null;
 	_reset = null;
 	_save = null;
@@ -18,6 +19,16 @@ class Shuffle {
 		this.__fatalError = false;
 		this._ignoreNewSelection = false;
 		this._selected = 0;
+
+		// hide validation - defaulting argument
+		try {
+			assert(__validateBool(opts.hide));
+			this._hide = opts.hide;
+		}
+		catch(e) {
+			if ("hide" in opts) print("ERROR in an instance of Shuffle: constructor - improper hide argument, switching to default value\n");
+			this._hide = false;
+		}
 
 		// loop validation - defaulting argument
 		try {
@@ -82,6 +93,13 @@ class Shuffle {
 
 	function _refresh() {
 		for (local i=0; i<this._slots.len(); i++) {
+			// hide slots
+			if (this._hide) {
+				if (i > fe.list.size-1) this._slots[i].visible = false;
+				else this._slots[i].visible = true;
+			}
+
+			// easy extendable functions
 			_refreshAll(this._slots[i]);
 			-(this._selected-i)==0 ? _refreshSelected(this._slots[i]) : _refreshDeselected(this._slots[i]);
 		}
