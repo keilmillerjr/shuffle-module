@@ -117,45 +117,44 @@ class Shuffle {
 	}
 
 	function _transitions(ttype, var, ttime) {
-		// Transition.ToNewSelection updates only indexes
-		// Transition.FromOldSelection updates all new data
-
-		// load save from fe.nv
-		if (ttype == Transition.StartLayout && this._save) {
-			try {
-				assert(__validatesSelected(fe.nv.shuffle[this._save]));
-				this._selected = fe.nv.shuffle[this._save];
-			}
-			catch(e) { print("ERROR in an instance of Shuffle: save - improper save data\n"); }
-		}
-
-		// store save in fe.nv
-		else if (ttype == Transition.EndLayout && this._save) {
-			if (!("shuffle" in fe.nv)) fe.nv.shuffle <- {};
-			if ("save" in fe.nv.shuffle) fe.nv.shuffle[this._save] = this._selected;
-			else fe.nv.shuffle[this._save] <- this._selected;
-		}
-
-		// to new list
-		else if (ttype == Transition.ToNewList) {
-			// do not update new selection
-			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
-			// reset
-			else if (this._reset == true) {
-				this._selected = 0;
-				fe.list.index = 0;
-			}
-		}
-
 		// from old selection
-		else if (ttype == Transition.FromOldSelection) {
+		if (ttype == Transition.FromOldSelection) {
 			// do not update new selection
 			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
 			// update selected
 			else __updateSelected(var);
 		}
 
-		// process
+		// to new list
+		else if (ttype == Transition.ToNewList) {
+			// do not update new selection
+			if (this._ignoreNewSelection == true) this._ignoreNewSelection = false;
+			else {
+				// reset
+				if (this._reset == true) {
+					this._selected = 0;
+					fe.list.index = 0;
+				}
+				// load selected from fe.nv
+				else if (this._save != null) {
+					try {
+						assert(__validatesSelected(fe.nv.shuffle[this._save][fe.list.name]));
+						this._selected = fe.nv.shuffle[this._save][fe.list.name];
+					}
+					catch(e) { print("ERROR in an instance of Shuffle: save - improper save data\n"); }
+				}
+			}
+		}
+
+		// save selected in fe.nv
+		else if (ttype == Transition.EndNavigation && this._save) {
+			if (!("shuffle" in fe.nv)) fe.nv.shuffle <- {};
+			if (!(this._save in fe.nv.shuffle)) fe.nv.shuffle[this._save] <- {};
+			if (!(fe.list.name in fe.nv.shuffle[this._save])) fe.nv.shuffle[this._save][fe.list.name] <- this._selected;
+			else fe.nv.shuffle[this._save][fe.list.name] = this._selected;
+		}
+
+		// update index offsets and refresh
 		if (ttype == Transition.ToNewList || ttype == Transition.FromOldSelection) {
 			_updateIndexOffsets();
 			_refresh();
