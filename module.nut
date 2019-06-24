@@ -19,16 +19,6 @@ class Shuffle {
 		this._ignoreNewSelection = false;
 		this._selected = 0;
 
-		// reset validation - defaulting argument
-		try {
-			assert(__validateBool(opts.reset));
-			this._reset = opts.reset;
-		}
-		catch(e) {
-			if ("reset" in opts) print("ERROR in an instance of Shuffle: constructor - improper reset argument, switching to default value\n");
-			this._reset = true;
-		}
-
 		// loop validation - defaulting argument
 		try {
 			assert(__validateBool(opts.loop));
@@ -37,6 +27,16 @@ class Shuffle {
 		catch(e) {
 			if ("loop" in opts) print("ERROR in an instance of Shuffle: constructor - improper reset argument, switching to default value\n");
 			this._loop = true;
+		}
+
+		// reset validation - defaulting argument
+		try {
+			assert(__validateBool(opts.reset));
+			this._reset = opts.reset;
+		}
+		catch(e) {
+			if ("reset" in opts) print("ERROR in an instance of Shuffle: constructor - improper reset argument, switching to default value\n");
+			this._reset = true;
 		}
 
 		// save validation - optional argument
